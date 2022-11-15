@@ -30,6 +30,16 @@ body {
     align-items: center;
 }
 
+#logo-1 {
+    align-self: flex-start;
+    width: 100px;
+    height: 100px;
+}
+
+#header {
+    display: flex;
+}
+
 .hidden {
     visibility: hidden;
     height: 0px;
