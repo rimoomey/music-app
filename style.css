@@ -9,15 +9,17 @@ body {
     display: flex;
 }
 
-#upper-body {
-    border: 5px dashed blue;
+.expandable {
     margin: 5px;
     width: 560px;
     height: 315px;
+    box-shadow: 4px 7px;
 }
 
 #result-container, #save-container {
-    border: 5px dashed black;
+    box-shadow: 2px 5px;
+    border-radius: 15px;
+    background-color: white;
     width: 500px;
     height: auto;
     max-height: 1000px;
@@ -30,6 +32,7 @@ body {
 
 .hidden {
     visibility: hidden;
+    height: 0px;
 }
 
 .thumbnail {
@@ -38,7 +41,7 @@ body {
 }
 
 ul {
-    background-color: beige;
+    background-color: white;
     font-size: x-large;
     align-self: flex-start;
 }

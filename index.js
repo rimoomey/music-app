@@ -81,10 +81,14 @@ function displayResult(recording) {
 // returns undefined
 function makeSongEdits(form) {
   const player = document.querySelector("#video-player");
+  player.parentNode.classList.remove('hidden');
   const songURL = document.querySelector("#video-url").value;
   const songThumbnail = document.querySelector("#thumbnail").value;
 
+  const iframe = document.createElement("iframe");
+
   player.innerHTML = `<iframe width="560" height="315" src="${songURL}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+  player.classList.remove('hidden');
 
   const thumbnailIMG = document.createElement("img");
   thumbnailIMG.classList.add("thumbnail");
