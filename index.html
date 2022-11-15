@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="style.css">
+        <script defer src="./index.js"></script>
+        <title>Music Saving App</title>
+    </head>
+    <body>
+
+        <h1>Song Saver 3000</h1>
+
+        <form id="search-input">
+            <input type='text' value="Search for an artist here..."></input>
+            <input type="submit"></input>
+        </form>
+
+        <div id="upper-body">
+            <div id="video-player"></div>
+        </div>
+
+        <div id="lower-body">
+            <div id="result-container">
+                <h1>Search Results</h1>
+                <ul>Potential matches:</ul>
+            </div>
+        
+            <div id="save-container">
+                <h1>Favorites</h1>
+                <ul>Saved Songs:</ul>
+            </div>
+        </div>
+
+        <form id="edit-form" class="hidden">
+            <input type="text" value="Thumbnail source url" id="thumbnail"></input>
+            <input type="text" value="Youtube video url" id="video-url"></input>
+            <input type="submit"></input>
+        </form>
+    </body>
+</html>
