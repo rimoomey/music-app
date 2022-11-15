@@ -1,5 +1,8 @@
 // A few key GLOBAL variables
 // we are using the musicbrainz api to query search results for a particular artists' songs
+
+// this is sam
+// check git again
 const api = "https://musicbrainz.org/ws/2/";
 let favNum = 0;
 
