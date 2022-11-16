@@ -1,10 +1,11 @@
 // A few key GLOBAL variables
 // we are using the musicbrainz api to query search results for a particular artists' songs
 
-// this is sam
-// check git again
 const api = "https://musicbrainz.org/ws/2/";
 let favNum = 0;
+
+// db.json url
+const url = "http://localhost:3000/songs/"
 
 init();
 
@@ -39,8 +40,8 @@ function apiQuery(api, searchValue) {
 
       editForm.addEventListener("submit", (e) => {
         e.preventDefault();
-
-        makeSongEdits(editForm);
+        const id = e.target.getAttribute("current-index")
+        makeSongEdits(editForm, id);
       });
     });
 }
@@ -74,7 +75,27 @@ function displayResult(recording) {
   resultList.append(li);
 
   saveBtn.addEventListener("click", (e) => {
-    saveSong(liInformation);
+    // POST request. Defined new variables for the individual song.
+    // For some reason, even though I ran the function inside the .then(), it won't
+    // persist onto the page after refresh. 
+    const songTitle = title
+    const songDate = date
+  
+      fetch(url, {
+          method: 'POST',
+          headers: {
+              "Content-Type": "application/json",
+              Accept: "application/json"
+          },
+          body: JSON.stringify({
+              "title": `${songTitle}`,
+              "date": `${songDate}`
+          })
+      })
+      .then((resp) => resp.json())
+      .then(song => {
+        saveSong(song);
+      })
   });
 }
 
@@ -82,7 +103,7 @@ function displayResult(recording) {
 // parameters:
 //   form: an HTML form element containing video-url and thumbnail fields
 // returns undefined
-function makeSongEdits(form) {
+function makeSongEdits(form, id) {
   const player = document.querySelector("#video-player");
   player.parentNode.classList.remove('hidden');
   const songURL = document.querySelector("#video-url").value;
@@ -106,6 +127,18 @@ function makeSongEdits(form) {
   listItem.append(thumbnailIMG);
 
   form.classList.add("hidden");
+
+  // PATCH request for thumbnail img. Took out the .then() because it wasn't doing anything.
+  fetch(url + `${listItem.id}`, {
+        method: "PATCH",
+        headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json"
+        },
+        body: JSON.stringify({
+            "thumbnail" : `${thumbnailIMG.src}`
+            })
+    })
 }
 
 // takes a date and verifies that it is not empty
@@ -121,33 +154,68 @@ function formatDate(date) {
 //   listItem - li containing the title and first-release-date of a song
 // returns undefined
 function saveSong(listItem) {
-  const newLI = document.createElement("li");
-  const newLIInformation = document.createElement("div");
-  const buttonContainer = document.createElement("div");
-  buttonContainer.classList.add("button-container");
+  fetch(url + `${listItem.id}`)
+  .then((resp) => resp.json())
+  .then(listItem => {
+    const newLI = document.createElement("li");
+    const newLIInformation = document.createElement("div");
+    const buttonContainer = document.createElement("div");
+    buttonContainer.classList.add("button-container");
 
-  newLIInformation.textContent = listItem.textContent;
-  newLI.append(newLIInformation);
+    newLIInformation.textContent = `${listItem.title} ${listItem.date}`;
+    newLI.append(newLIInformation);
 
-  newLI.classList.add("search-result");
+    newLI.classList.add("search-result");
 
-  const saveContainer = document.querySelector("#save-container ul");
-  saveContainer.append(newLI);
+    const saveContainer = document.querySelector("#save-container ul");
 
-  const deleteBtn = document.createElement("button");
-  deleteBtn.textContent = "X";
-  buttonContainer.append(deleteBtn);
+    saveContainer.append(newLI);
 
-  const editBtn = document.createElement("button");
-  editBtn.textContent = "Edit song info";
-  buttonContainer.append(editBtn);
+    const deleteBtn = document.createElement("button");
+    deleteBtn.textContent = "X";
+    buttonContainer.append(deleteBtn);
 
-  newLI.id = ++favNum;
-  newLI.append(buttonContainer);
+    const editBtn = document.createElement("button");
+    editBtn.textContent = "Edit song info";
+    buttonContainer.append(editBtn);
 
-  editBtn.addEventListener("click", () => {
-    const editForm = document.querySelector("#edit-form");
-    editForm.classList.remove("hidden");
-    editForm.setAttribute("current-index", newLI.id);
+    newLI.id = ++favNum;
+    newLI.append(buttonContainer);
+
+    editBtn.addEventListener("click", () => {
+      const editForm = document.querySelector("#edit-form");
+      editForm.classList.remove("hidden");
+      editForm.setAttribute("current-index", newLI.id);
   });
+  })
+  // const newLI = document.createElement("li");
+  // const newLIInformation = document.createElement("div");
+  // const buttonContainer = document.createElement("div");
+  // buttonContainer.classList.add("button-container");
+
+  // newLIInformation.textContent = `${listItem.title} ${listItem.date}`;
+  // newLI.append(newLIInformation);
+
+  // newLI.classList.add("search-result");
+
+  // const saveContainer = document.querySelector("#save-container ul");
+
+  // saveContainer.append(newLI);
+
+  // const deleteBtn = document.createElement("button");
+  // deleteBtn.textContent = "X";
+  // buttonContainer.append(deleteBtn);
+
+  // const editBtn = document.createElement("button");
+  // editBtn.textContent = "Edit song info";
+  // buttonContainer.append(editBtn);
+
+  // newLI.id = ++favNum;
+  // newLI.append(buttonContainer);
+
+  // editBtn.addEventListener("click", () => {
+  //   const editForm = document.querySelector("#edit-form");
+  //   editForm.classList.remove("hidden");
+  //   editForm.setAttribute("current-index", newLI.id);
+  // });
 }
