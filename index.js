@@ -2,9 +2,6 @@
 // we are using the musicbrainz api to query search results for a particular artists' songs
 
 const api = "https://musicbrainz.org/ws/2/";
-let favNum = 0;
-
-// db.json url
 const localHost = "http://localhost:3000/songs/";
 
 init();
