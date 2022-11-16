@@ -20,8 +20,11 @@ function init() {
 
     const searchArtist = searchForm.querySelector("input").value;
     const additionalFormatting = `recording?query=artist:"${searchArtist}"&limit=10&fmt=json`;
+    
+    apiQuery(api + additionalFormatting, searchArtist)
 
-    apiQuery(api + additionalFormatting, searchArtist);
+    const searchValue = document.querySelector("#search")
+    searchValue.value = ""
   });
 }
 
@@ -71,7 +74,18 @@ function apiQuery(api, searchValue) {
       resultList.textContent = `Potential song matches for "${searchValue}":`;
 
       data.recordings.forEach((recording) => displayResult(recording));
-    });
+
+      const editForm = document.querySelector("#edit-form");
+
+      editForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        makeSongEdits(editForm);
+
+        const thumbnailForm = document.querySelector("#thumbnail")
+        const youtubeForm = document.querySelector("#video-url")
+        thumbnailForm.value = ""
+        youtubeForm.value = ""
+      });
 }
 
 // function that takes a recording object from API and creates an li for it in the results area
@@ -133,6 +147,8 @@ function displayResult(recording) {
 //   form: an HTML form element containing video-url and thumbnail fields
 // returns undefined
 function makeSongEdits(form) {
+  const player = document.querySelector("#video-player");
+  player.parentNode.classList.remove('hidden');
   const songURL = document.querySelector("#video-url").value;
   const songThumbnail = document.querySelector("#thumbnail").value;
 
@@ -153,17 +169,16 @@ function makeSongEdits(form) {
   console.log(listItem.id);
 
   // PATCH request for thumbnail img. Took out the .then() because it wasn't doing anything.
-  fetch(`${localHost}${listItem.id}`, {
-    method: "PATCH",
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "application/json",
-    },
-    body: JSON.stringify({
-      thumbnail: `${songThumbnail}`,
-      videoURL: `${songURL}`,
-    }),
-  });
+  fetch(localHost + `${listItem.id}`, {
+        method: "PATCH",
+        headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json"
+        },
+        body: JSON.stringify({
+            "thumbnail" : `${thumbnailIMG.src}`
+            })
+    })
 }
 
 // takes a date and verifies that it is not empty
