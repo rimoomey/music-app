@@ -24,6 +24,21 @@ function init() {
     });
 }
 
+// DELETE request. 
+function deleteSavedFavs(api, id, li, container) {
+  fetch(api + `${id}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json"
+    }
+  })
+  .then(resp => resp.json())
+  .then(data => {
+    li.remove(container)
+  })
+}
+
 function displaySavedFavs(api) {
   //implicit GET request
   fetch(api)
@@ -165,68 +180,39 @@ function formatDate(date) {
 //   listItem - li containing the title and first-release-date of a song
 // returns undefined
 function saveSong(listItem) {
-  fetch(localHost + `${listItem.id}`)
-  .then((resp) => resp.json())
-  .then(listItem => {
-    const newLI = document.createElement("li");
-    const newLIInformation = document.createElement("div");
-    const buttonContainer = document.createElement("div");
-    buttonContainer.classList.add("button-container");
+  const newLI = document.createElement("li");
+  const newLIInformation = document.createElement("div");
+  const buttonContainer = document.createElement("div");
+  buttonContainer.classList.add("button-container");
 
-    newLIInformation.textContent = `${listItem.title} ${listItem.date}`;
-    newLI.append(newLIInformation);
+  newLIInformation.textContent = `${listItem.title} ${listItem.date}`;
+  newLI.append(newLIInformation);
 
-    newLI.classList.add("search-result");
+  newLI.classList.add("search-result");
 
-    const saveContainer = document.querySelector("#save-container ul");
+  const saveContainer = document.querySelector("#save-container ul");
 
-    saveContainer.append(newLI);
+  saveContainer.append(newLI);
 
-    const deleteBtn = document.createElement("button");
-    deleteBtn.textContent = "X";
-    buttonContainer.append(deleteBtn);
+  const deleteBtn = document.createElement("button");
+  deleteBtn.textContent = "X";
+  buttonContainer.append(deleteBtn);
 
-    const editBtn = document.createElement("button");
-    editBtn.textContent = "Edit song info";
-    buttonContainer.append(editBtn);
-
-    newLI.id = ++favNum;
-    newLI.append(buttonContainer);
-
-    editBtn.addEventListener("click", () => {
-      const editForm = document.querySelector("#edit-form");
-      editForm.classList.remove("hidden");
-      editForm.setAttribute("current-index", newLI.id);
-  });
+  deleteBtn.addEventListener("click", () => {
+    // Run this DELETE request inside of here
+    deleteSavedFavs(localHost, listItem.id, newLI, saveContainer)
   })
-  // const newLI = document.createElement("li");
-  // const newLIInformation = document.createElement("div");
-  // const buttonContainer = document.createElement("div");
-  // buttonContainer.classList.add("button-container");
 
-  // newLIInformation.textContent = `${listItem.title} ${listItem.date}`;
-  // newLI.append(newLIInformation);
+  const editBtn = document.createElement("button");
+  editBtn.textContent = "Edit song info";
+  buttonContainer.append(editBtn);
 
-  // newLI.classList.add("search-result");
+  newLI.id = ++favNum;
+  newLI.append(buttonContainer);
 
-  // const saveContainer = document.querySelector("#save-container ul");
-
-  // saveContainer.append(newLI);
-
-  // const deleteBtn = document.createElement("button");
-  // deleteBtn.textContent = "X";
-  // buttonContainer.append(deleteBtn);
-
-  // const editBtn = document.createElement("button");
-  // editBtn.textContent = "Edit song info";
-  // buttonContainer.append(editBtn);
-
-  // newLI.id = ++favNum;
-  // newLI.append(buttonContainer);
-
-  // editBtn.addEventListener("click", () => {
-  //   const editForm = document.querySelector("#edit-form");
-  //   editForm.classList.remove("hidden");
-  //   editForm.setAttribute("current-index", newLI.id);
-  // });
+  editBtn.addEventListener("click", () => {
+    const editForm = document.querySelector("#edit-form");
+    editForm.classList.remove("hidden");
+    editForm.setAttribute("current-index", newLI.id);
+  });
 }
