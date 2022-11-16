@@ -21,6 +21,9 @@ function init() {
         const additionalFormatting = `recording?query=artist:"${searchArtist}"&limit=10&fmt=json`;
 
         apiQuery(api + additionalFormatting, searchArtist)
+
+        const searchValue = document.querySelector("#search")
+        searchValue.value = ""
     });
 }
 
@@ -66,8 +69,12 @@ function apiQuery(api, searchValue) {
 
       editForm.addEventListener("submit", (e) => {
         e.preventDefault();
-        const id = e.target.getAttribute("current-index")
-        makeSongEdits(editForm, id);
+        makeSongEdits(editForm);
+
+        const thumbnailForm = document.querySelector("#thumbnail")
+        const youtubeForm = document.querySelector("#video-url")
+        thumbnailForm.value = ""
+        youtubeForm.value = ""
       });
     });
 }
@@ -129,7 +136,7 @@ function displayResult(recording) {
 // parameters:
 //   form: an HTML form element containing video-url and thumbnail fields
 // returns undefined
-function makeSongEdits(form, id) {
+function makeSongEdits(form) {
   const player = document.querySelector("#video-player");
   player.parentNode.classList.remove('hidden');
   const songURL = document.querySelector("#video-url").value;
@@ -155,7 +162,7 @@ function makeSongEdits(form, id) {
   form.classList.add("hidden");
 
   // PATCH request for thumbnail img. Took out the .then() because it wasn't doing anything.
-  fetch(url + `${listItem.id}`, {
+  fetch(localHost + `${listItem.id}`, {
         method: "PATCH",
         headers: {
             "Content-Type": "application/json",
