@@ -12,7 +12,7 @@ init();
 // begins program execution
 function init() {
   displaySavedFavs(localHost); // refactored
-  enableEditing();
+  enableEditing(); // refactored
 
   const searchForm = document.querySelector("#search-input");
   searchForm.addEventListener("submit", (e) => {
@@ -50,11 +50,8 @@ function createFavoriteListItem(song) {
   liInfo.textContent = `${song.title} ${song.date}`;
   li.append(liInfo);
 
-  if (song.thumbnail !== '') {
-    const thumbnail = document.createElement('img');
-    thumbnail.src = song.thumbnail;
-    thumbnail.classList.add('thumbnail');
-    li.append(thumbnail);
+  if (song.thumbnail !== "") {
+    displayThumbnail(li, song.thumbnail);
   }
 
   const buttonContainer = document.createElement("div");
@@ -93,6 +90,64 @@ function addFavoriteButtons(li, buttonContainer) {
   });
 }
 
+function enableEditing() {
+  const editForm = document.querySelector("#edit-form");
+  editForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    makeSongEdits(editForm);
+  });
+}
+
+// takes the form which edits a song in the favorites list and processes the requested changes
+// parameters:
+//   form: an HTML form element containing video-url and thumbnail fields
+// returns undefined
+function makeSongEdits(editForm) {
+  editForm.classList.add("hidden");
+
+  const newVideoURL = document.querySelector("#video-url").value;
+  const newThumbnail = document.querySelector("#thumbnail").value;
+
+  const favoritedLI = document.querySelector(
+    `li[id="${editForm.getAttribute("current-index")}"]`
+  );
+
+  fetch(`${localHost}${favoritedLI.id}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+    body: JSON.stringify({
+      thumbnail: `${newThumbnail}`,
+      videoURL: `${newVideoURL}`,
+    }),
+  })
+    .then((res) => res.json())
+    .then(() => displayThumbnail(favoritedLI, newThumbnail));
+}
+
+function displayThumbnail(li, thumbnailURL) {
+  const currentThumbnail = li.querySelector("img");
+  if (currentThumbnail !== null) {
+    currentThumbnail.remove();
+  }
+
+  const img = document.createElement("img");
+  img.classList.add("thumbnail");
+  img.src = thumbnailURL;
+  li.append(img);
+
+  const buttonContainer = li.querySelector(".button-container");
+  if (buttonContainer !== null) {
+    buttonContainer.remove();
+    const newButtonContainer = document.createElement("div");
+    newButtonContainer.classList.add("button-container");
+    addFavoriteButtons(li, newButtonContainer);
+    li.append(newButtonContainer);
+  }
+}
+
 // DELETE request.
 function deleteSavedFavs(api, id, li) {
   fetch(api + `${id}`, {
@@ -104,17 +159,6 @@ function deleteSavedFavs(api, id, li) {
   })
     .then((resp) => resp.json())
     .then(li.remove());
-}
-
-function enableEditing() {
-  const editForm = document.querySelector("#edit-form");
-
-  console.log(editForm);
-
-  editForm.addEventListener("submit", (e) => {
-    e.preventDefault();
-    makeSongEdits(editForm);
-  });
 }
 
 // takes the api address and a value to search for, then loads the results
@@ -184,44 +228,6 @@ function displayResult(recording) {
       .then((song) => {
         saveSong(song);
       });
-  });
-}
-
-// takes the form which edits a song in the favorites list and processes the requested changes
-// parameters:
-//   form: an HTML form element containing video-url and thumbnail fields
-// returns undefined
-function makeSongEdits(form) {
-  const songURL = document.querySelector("#video-url").value;
-  const songThumbnail = document.querySelector("#thumbnail").value;
-
-  const thumbnailIMG = document.createElement("img");
-  thumbnailIMG.classList.add("thumbnail");
-  thumbnailIMG.src = songThumbnail;
-
-  // YOU WILL WANT PATCH REQUESTS TO USE THIS INFORMATION @ Sam
-
-  const listItem = document.querySelector(
-    `li[id="${form.getAttribute("current-index")}"]`
-  );
-
-  listItem.append(thumbnailIMG);
-
-  form.classList.add("hidden");
-
-  console.log(listItem.id);
-
-  // PATCH request for thumbnail img. Took out the .then() because it wasn't doing anything.
-  fetch(`${localHost}${listItem.id}`, {
-    method: "PATCH",
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "application/json",
-    },
-    body: JSON.stringify({
-      thumbnail: `${songThumbnail}`,
-      videoURL: `${songURL}`,
-    }),
   });
 }
 
