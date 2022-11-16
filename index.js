@@ -11,7 +11,7 @@ init();
 
 // begins program execution
 function init() {
-  displaySavedFavs(localHost);
+  displaySavedFavs(localHost); // refactored
   enableEditing();
 
   const searchForm = document.querySelector("#search-input");
@@ -22,6 +22,74 @@ function init() {
     const additionalFormatting = `recording?query=artist:"${searchArtist}"&limit=10&fmt=json`;
 
     apiQuery(api + additionalFormatting, searchArtist);
+  });
+}
+
+// ********************* The Following Functions Handle GET Requests and Displaying Saved Songs *************************
+
+function displaySavedFavs(api) {
+  fetch(api)
+    .then((res) => res.json())
+    .then((data) => {
+      data.forEach((song) => showFavoritedSong(song));
+    });
+}
+
+function showFavoritedSong(song) {
+  const li = createFavoriteListItem(song);
+  const saveContainer = document.querySelector("#save-container ul");
+  saveContainer.append(li);
+}
+
+function createFavoriteListItem(song) {
+  const li = document.createElement("li");
+  li.id = song.id;
+  li.classList.add("favorite-song");
+
+  const liInfo = document.createElement("div");
+  liInfo.textContent = `${song.title} ${song.date}`;
+  li.append(liInfo);
+
+  if (song.thumbnail !== '') {
+    const thumbnail = document.createElement('img');
+    thumbnail.src = song.thumbnail;
+    thumbnail.classList.add('thumbnail');
+    li.append(thumbnail);
+  }
+
+  const buttonContainer = document.createElement("div");
+  buttonContainer.classList.add("button-container");
+  addFavoriteButtons(li, buttonContainer);
+  li.append(buttonContainer);
+
+  return li;
+}
+
+function addFavoriteButtons(li, buttonContainer) {
+  const playBtn = document.createElement("button");
+  playBtn.textContent = "Play";
+  buttonContainer.append(playBtn);
+
+  playBtn.addEventListener("click", () => {
+    playVideo(localHost, song);
+  });
+
+  const editBtn = document.createElement("button");
+  editBtn.textContent = "Edit song info";
+  buttonContainer.append(editBtn);
+
+  editBtn.addEventListener("click", () => {
+    const editForm = document.querySelector("#edit-form");
+    editForm.classList.remove("hidden");
+    editForm.setAttribute("current-index", li.id);
+  });
+
+  const deleteBtn = document.createElement("button");
+  deleteBtn.textContent = "X";
+  buttonContainer.append(deleteBtn);
+
+  deleteBtn.addEventListener("click", () => {
+    deleteSavedFavs(localHost, song.id, li);
   });
 }
 
@@ -36,15 +104,6 @@ function deleteSavedFavs(api, id, li) {
   })
     .then((resp) => resp.json())
     .then(li.remove());
-}
-
-function displaySavedFavs(api) {
-  //implicit GET request
-  fetch(api)
-    .then((res) => res.json())
-    .then((data) => {
-      data.forEach((song) => saveSong(song));
-    });
 }
 
 function enableEditing() {
@@ -172,63 +231,6 @@ function makeSongEdits(form) {
 // returns date or 'date not listed' if date is empty
 function formatDate(date) {
   return (date === undefined) | (date === "") ? "date not listed" : date;
-}
-
-// takes a listItem and moves a copy it to the favorites list
-// parameters:
-//   listItem - li containing the title and first-release-date of a song
-// returns undefined
-function saveSong(listItem) {
-  const newLI = document.createElement("li");
-  const newLIInformation = document.createElement("div");
-  const buttonContainer = document.createElement("div");
-  buttonContainer.classList.add("button-container");
-
-  newLIInformation.textContent = `${listItem.title} ${listItem.date}`;
-  newLI.append(newLIInformation);
-
-  if (listItem.thumbnail !== undefined) {
-    const thumbnail = document.createElement('img');
-    thumbnail.src = listItem.thumbnail;
-    thumbnail.classList.add('thumbnail');
-    newLI.append(thumbnail);
-  }
-
-  newLI.classList.add("search-result");
-
-  const saveContainer = document.querySelector("#save-container ul");
-
-  saveContainer.append(newLI);
-
-  const playBtn = document.createElement("button");
-  playBtn.textContent = "Play";
-  buttonContainer.append(playBtn);
-
-  playBtn.addEventListener("click", () => {
-    playVideo(localHost, listItem);
-  });
-
-  const editBtn = document.createElement("button");
-  editBtn.textContent = "Edit song info";
-  buttonContainer.append(editBtn);
-
-  const deleteBtn = document.createElement("button");
-  deleteBtn.textContent = "X";
-  buttonContainer.append(deleteBtn);
-
-  deleteBtn.addEventListener("click", () => {
-    // Run this DELETE request inside of here
-    deleteSavedFavs(localHost, listItem.id, newLI, saveContainer);
-  });
-
-  newLI.id = ++favNum;
-  newLI.append(buttonContainer);
-
-  editBtn.addEventListener("click", () => {
-    const editForm = document.querySelector("#edit-form");
-    editForm.classList.remove("hidden");
-    editForm.setAttribute("current-index", newLI.id);
-  });
 }
 
 function playVideo(localHost, listItem) {

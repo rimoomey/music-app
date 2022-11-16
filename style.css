@@ -65,7 +65,7 @@ li {
     flex-direction: column;
 }
 
-.search-result {
+.search-result, .favorite-song {
     border: 5px solid lightblue;
     font-size: medium;
     width: 300px;
