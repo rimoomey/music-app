@@ -26,7 +26,7 @@ body {
     background-color: white;
     width: 500px;
     height: auto;
-    max-height: 1000px;
+    max-height: 700px;
     margin: 10px;
     display: flex;
     flex-direction: column;
@@ -56,8 +56,13 @@ body {
 
 ul {
     background-color: white;
+    width: 400px;
+    height: auto;
+    max-height: 700px;
     font-size: x-large;
     align-self: flex-start;
+    overflow: hidden;
+    overflow-y: scroll;
 }
 
 li {
