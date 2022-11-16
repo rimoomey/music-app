@@ -11,27 +11,15 @@ init();
 
 // begins program execution
 function init() {
-  displaySavedFavs(localHost); // refactored
-  enableEditing(); // refactored
-
-  const searchForm = document.querySelector("#search-input");
-  searchForm.addEventListener("submit", (e) => {
-    e.preventDefault();
-
-    const searchArtist = searchForm.querySelector("input").value;
-    const additionalFormatting = `recording?query=artist:"${searchArtist}"&limit=10&fmt=json`;
-    
-    apiQuery(api + additionalFormatting, searchArtist)
-
-    const searchValue = document.querySelector("#search")
-    searchValue.value = ""
-  });
+  displaySavedFavs();
+  enableEditing();
+  enableSearch();
 }
 
 // ********************* The Following Functions Handle GET Requests and Displaying Saved Songs *************************
 
-function displaySavedFavs(api) {
-  fetch(api)
+function displaySavedFavs() {
+  fetch(localHost)
     .then((res) => res.json())
     .then((data) => {
       data.forEach((song) => showFavoritedSong(song));
@@ -151,8 +139,8 @@ function makeSongEdits(editForm) {
   })
     .then((res) => res.json())
     .then(() => {
-      if(newThumbnail !== '') {
-        displayThumbnail(favoritedLI, newThumbnail)
+      if (newThumbnail !== "") {
+        displayThumbnail(favoritedLI, newThumbnail);
       }
     });
 }
@@ -171,6 +159,21 @@ function deleteSavedFavs(api, li) {
 }
 
 // ********************* The following functions handle querying MusicBrainz api and displaying results, as well as saving mechanics ***************************
+
+function enableSearch() {
+  const searchForm = document.querySelector("#search-input");
+  searchForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    const searchArtist = searchForm.querySelector("input").value;
+    const additionalFormatting = `recording?query=artist:"${searchArtist}"&limit=10&fmt=json`;
+
+    apiQuery(api + additionalFormatting, searchArtist);
+
+    const searchValue = document.querySelector("#search");
+    searchValue.value = "";
+  });
+}
 
 // takes the api address and a value to search for, then loads the results
 // parameters:
@@ -204,16 +207,16 @@ function createSearchLI(song) {
   const buttonContainer = document.createElement("div");
   buttonContainer.classList.add("button-container");
 
-  console.log(song);
-
-  liInformation.textContent = `${song.title} (${formatDate(song['first-release-date'])})`;
+  liInformation.textContent = `${song.title} (${formatDate(
+    song["first-release-date"]
+  )})`;
 
   li.append(liInformation);
   li.classList.add("search-result");
 
   const saveBtn = document.createElement("button");
   saveBtn.textContent = "Save";
-  saveBtn.addEventListener('click', () => save(song))
+  saveBtn.addEventListener("click", () => save(song));
   buttonContainer.append(saveBtn);
 
   li.append(buttonContainer);
@@ -230,9 +233,9 @@ function save(song) {
     },
     body: JSON.stringify({
       title: `${song.title}`,
-      date: `${song['first-release-date']}`,
-      thumbnail: '',
-      videoURL: ''
+      date: `${song["first-release-date"]}`,
+      thumbnail: "",
+      videoURL: "",
     }),
   })
     .then((res) => res.json())
@@ -247,7 +250,7 @@ function playVideo(localHost, favoritedSong) {
   fetch(`${localHost}${favoritedSong.id}`)
     .then((res) => res.json())
     .then((song) => {
-      if (song.videoURL !== '') {
+      if (song.videoURL !== "") {
         const player = document.querySelector("#video-player");
         player.parentNode.classList.remove("hidden");
         player.innerHTML = `<iframe width="560" height="315" src="${song.videoURL}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
