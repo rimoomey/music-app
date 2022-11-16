@@ -86,6 +86,7 @@ function apiQuery(api, searchValue) {
         thumbnailForm.value = ""
         youtubeForm.value = ""
       });
+    })
 }
 
 // function that takes a recording object from API and creates an li for it in the results area
