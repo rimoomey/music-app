@@ -7,6 +7,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
+    /* border: solid; */
 }
 
 #lower-body {
@@ -70,13 +71,21 @@ li {
     flex-direction: column;
 }
 
+li:hover {
+    box-shadow: 0px 2px 11px rgba(33,33,33,.2);
+    text-shadow: none;
+    transition: ease-in-out 0.3s;
+}
+
 .search-result, .favorite-song {
-    border: 5px solid lightblue;
+    border: 3px solid #87CEFA;
+    border-radius: 10px;
     font-size: medium;
     width: 300px;
     list-style: none;
-    margin: 5px;
+    margin: 10px;
     text-align: left;
+    padding: 7px;
 }
 
 li .button-container {
@@ -88,13 +97,6 @@ h1 {
 }
 
 input[type=text] {
-    /* padding: 10px;
-    margin-bottom: 20px;
-    width: 500px;
-    height: 30px;
-    border-radius: 10px;
-    box-shadow: 0px 5px 15px rgba(0,0,0,0.2);
-    border-color: #89cff0 */
     border: none;
     -webkit-appearance: none;
     -ms-appearance: none;
@@ -106,6 +108,7 @@ input[type=text] {
     width: 300px;
     box-shadow: 0px 1px 3px;
     margin: 10px;
+    outline: none;
 }
 
 input {
@@ -122,17 +125,15 @@ input::placeholder {
 }
 
 #main-btn {
-  background-color: transparent;
-  border: 1;
-  border-width: .25em;
-  border-color: #87ceeb;
-  font-weight: 600;
-  line-height: 1;
-  margin-top: 1.5rem;
-  padding: 0.5em;
+  background: #4169E1;
+  color: white;
+  border-style: outset;
+  border-color: #4169E1;
   border-radius: 10px;
-  width: 100px;
   height: 45px;
+  width: 100px;
+  font: bold 15px arial,sans-serif;
+  text-shadow: none;
 }
 
 #main-btn,
@@ -142,6 +143,24 @@ input[type=submit] {
 }
 
 #main-btn:hover {
-    background-color: #87ceeb;
-    transition: 0.7s;
+    background-color: #6495ED;
+    transition: 0.4s;
+}
+
+#edit-submit {
+  background: #4169E1;
+  color: white;
+  border-style: outset;
+  border-color: #4169E1;
+  border-radius: 10px;
+  height: 45px;
+  width: 100px;
+  font: bold 15px arial,sans-serif;
+  text-shadow: none;
+}
+
+#edit-submit,
+input[type=submit] {
+  font: 1em/1.25em Arial, Helvetica, sans-serif;
+  font-weight: bold;
 }
