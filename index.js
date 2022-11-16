@@ -5,12 +5,14 @@ const api = "https://musicbrainz.org/ws/2/";
 let favNum = 0;
 
 // db.json url
-const url = "http://localhost:3000/songs/"
+const localHost = "http://localhost:3000/songs/"
 
 init();
 
 // begins program execution
 function init() {
+    displaySavedFavs(localHost)
+
     const searchForm = document.querySelector("#search-input");
     searchForm.addEventListener("submit", (e) => {
         e.preventDefault();
@@ -20,6 +22,15 @@ function init() {
 
         apiQuery(api + additionalFormatting, searchArtist)
     });
+}
+
+function displaySavedFavs(api) {
+  //implicit GET request
+  fetch(api)
+  .then(res => res.json())
+  .then(data => {
+    data.forEach(song => saveSong(song));
+  });
 }
 
 // takes the api address and a value to search for, then loads the results
@@ -81,7 +92,7 @@ function displayResult(recording) {
     const songTitle = title
     const songDate = date
   
-      fetch(url, {
+      fetch(localHost, {
           method: 'POST',
           headers: {
               "Content-Type": "application/json",
@@ -154,7 +165,7 @@ function formatDate(date) {
 //   listItem - li containing the title and first-release-date of a song
 // returns undefined
 function saveSong(listItem) {
-  fetch(url + `${listItem.id}`)
+  fetch(localHost + `${listItem.id}`)
   .then((resp) => resp.json())
   .then(listItem => {
     const newLI = document.createElement("li");
