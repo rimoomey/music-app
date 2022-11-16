@@ -47,7 +47,7 @@ function createFavoriteListItem(song) {
   li.classList.add("favorite-song");
 
   const liInfo = document.createElement("div");
-  liInfo.textContent = `${song.title} ${song.date}`;
+  liInfo.textContent = `${song.title} (${song.date})`;
   li.append(liInfo);
 
   if (song.thumbnail !== "") {
@@ -68,7 +68,7 @@ function addFavoriteButtons(li, buttonContainer) {
   buttonContainer.append(playBtn);
 
   playBtn.addEventListener("click", () => {
-    playVideo(localHost, song);
+    playVideo(localHost, li);
   });
 
   const editBtn = document.createElement("button");
@@ -86,9 +86,32 @@ function addFavoriteButtons(li, buttonContainer) {
   buttonContainer.append(deleteBtn);
 
   deleteBtn.addEventListener("click", () => {
-    deleteSavedFavs(localHost, song.id, li);
+    deleteSavedFavs(localHost, li);
   });
 }
+
+function displayThumbnail(li, thumbnailURL) {
+  const currentThumbnail = li.querySelector("img");
+  if (currentThumbnail !== null) {
+    currentThumbnail.remove();
+  }
+
+  const img = document.createElement("img");
+  img.classList.add("thumbnail");
+  img.src = thumbnailURL;
+  li.append(img);
+
+  const buttonContainer = li.querySelector(".button-container");
+  if (buttonContainer !== null) {
+    buttonContainer.remove();
+    const newButtonContainer = document.createElement("div");
+    newButtonContainer.classList.add("button-container");
+    addFavoriteButtons(li, newButtonContainer);
+    li.append(newButtonContainer);
+  }
+}
+
+// ************************* The Following Functions handle Editing and Redisplaying Song Information ************************
 
 function enableEditing() {
   const editForm = document.querySelector("#edit-form");
@@ -124,33 +147,16 @@ function makeSongEdits(editForm) {
     }),
   })
     .then((res) => res.json())
-    .then(() => displayThumbnail(favoritedLI, newThumbnail));
+    .then(() => {
+      if(newThumbnail !== '') {
+        displayThumbnail(favoritedLI, newThumbnail)
+      }
+    });
 }
 
-function displayThumbnail(li, thumbnailURL) {
-  const currentThumbnail = li.querySelector("img");
-  if (currentThumbnail !== null) {
-    currentThumbnail.remove();
-  }
-
-  const img = document.createElement("img");
-  img.classList.add("thumbnail");
-  img.src = thumbnailURL;
-  li.append(img);
-
-  const buttonContainer = li.querySelector(".button-container");
-  if (buttonContainer !== null) {
-    buttonContainer.remove();
-    const newButtonContainer = document.createElement("div");
-    newButtonContainer.classList.add("button-container");
-    addFavoriteButtons(li, newButtonContainer);
-    li.append(newButtonContainer);
-  }
-}
-
-// DELETE request.
-function deleteSavedFavs(api, id, li) {
-  fetch(api + `${id}`, {
+// ******************** Single Delete Function ***********************
+function deleteSavedFavs(api, li) {
+  fetch(api + `${li.id}`, {
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",
@@ -160,6 +166,8 @@ function deleteSavedFavs(api, id, li) {
     .then((resp) => resp.json())
     .then(li.remove());
 }
+
+// ********************* The following functions handle querying MusicBrainz api and displaying results, as well as saving mechanics ***************************
 
 // takes the api address and a value to search for, then loads the results
 // parameters:
@@ -173,7 +181,7 @@ function apiQuery(api, searchValue) {
       resultList.innerHTML = "";
       resultList.textContent = `Potential song matches for "${searchValue}":`;
 
-      data.recordings.forEach((recording) => displayResult(recording));
+      data.recordings.forEach((song) => displayResult(song));
     });
 }
 
@@ -181,55 +189,71 @@ function apiQuery(api, searchValue) {
 // parameters:
 //  recording - the recording object
 //returns undefined
-function displayResult(recording) {
+function displayResult(song) {
   const resultList = document.querySelector("#result-container ul");
+  const li = createSearchLI(song);
+  resultList.append(li);
+}
 
+function createSearchLI(song) {
   const li = document.createElement("li");
   const liInformation = document.createElement("div");
   const buttonContainer = document.createElement("div");
   buttonContainer.classList.add("button-container");
 
-  const title = recording.title;
-  let date = formatDate(recording["first-release-date"]);
+  console.log(song);
 
-  liInformation.textContent = `${title} (${date})`;
+  liInformation.textContent = `${song.title} (${formatDate(song['first-release-date'])})`;
 
   li.append(liInformation);
   li.classList.add("search-result");
 
-  // YOU WILL WANT POST REQUESTS TO USE THIS INFORMATION @ Sam
-
   const saveBtn = document.createElement("button");
   saveBtn.textContent = "Save";
+  saveBtn.addEventListener('click', () => save(song))
   buttonContainer.append(saveBtn);
 
   li.append(buttonContainer);
-  resultList.append(li);
 
-  saveBtn.addEventListener("click", (e) => {
-    // POST request. Defined new variables for the individual song.
-    // For some reason, even though I ran the function inside the .then(), it won't
-    // persist onto the page after refresh.
-    const songTitle = title;
-    const songDate = date;
-
-    fetch(localHost, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      body: JSON.stringify({
-        title: `${songTitle}`,
-        date: `${songDate}`,
-      }),
-    })
-      .then((resp) => resp.json())
-      .then((song) => {
-        saveSong(song);
-      });
-  });
+  return li;
 }
+
+function save(song) {
+  fetch(localHost, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+    body: JSON.stringify({
+      title: `${song.title}`,
+      date: `${song['first-release-date']}`,
+      thumbnail: '',
+      videoURL: ''
+    }),
+  })
+    .then((res) => res.json())
+    .then((song) => {
+      showFavoritedSong(song);
+    });
+}
+
+// ********************* Creates a video box to play the saved song for a given favorited list item *****************
+
+function playVideo(localHost, favoritedSong) {
+  fetch(`${localHost}${favoritedSong.id}`)
+    .then((res) => res.json())
+    .then((song) => {
+      if (song.videoURL !== '') {
+        const player = document.querySelector("#video-player");
+        player.parentNode.classList.remove("hidden");
+        player.innerHTML = `<iframe width="560" height="315" src="${song.videoURL}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+        player.classList.remove("hidden");
+      }
+    });
+}
+
+// ********************* helping functions *********************************
 
 // takes a date and verifies that it is not empty
 // parameters:
@@ -237,19 +261,4 @@ function displayResult(recording) {
 // returns date or 'date not listed' if date is empty
 function formatDate(date) {
   return (date === undefined) | (date === "") ? "date not listed" : date;
-}
-
-function playVideo(localHost, listItem) {
-  const id = listItem.id;
-
-  fetch(`${localHost}${id}`)
-    .then((res) => res.json())
-    .then((data) => {
-      if (data.videoURL !== undefined) {
-        const player = document.querySelector("#video-player");
-        player.parentNode.classList.remove("hidden");
-        player.innerHTML = `<iframe width="560" height="315" src="${data.videoURL}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
-        player.classList.remove("hidden");
-      }
-    });
 }
