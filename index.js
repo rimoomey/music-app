@@ -219,6 +219,7 @@ function createSearchLI(song) {
 
   const saveBtn = document.createElement("button");
   saveBtn.textContent = "Save";
+  saveBtn.classList.add("li-button")
   saveBtn.addEventListener("click", () => save(song));
   buttonContainer.append(saveBtn);
 
