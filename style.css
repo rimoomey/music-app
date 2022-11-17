@@ -7,7 +7,8 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    border: solid #bc8f8f;
+    /* Added a border to wrap around our content */
+    border: solid #6a5376;
     border-radius: 30px;
     padding-bottom: 50px;
     width: 60%;
@@ -88,7 +89,7 @@ li:hover {
 }
 
 .search-result, .favorite-song {
-    border: 3px solid #87CEFA;
+    border: 3px solid #DED6DA;
     border-radius: 10px;
     font-size: medium;
     width: 300px;
@@ -106,13 +107,14 @@ h1 {
     color: black;
 }
 
+/* Form input styling (text to animate out and form styling) */
 input[type=text] {
     border: none;
     -webkit-appearance: none;
     -ms-appearance: none;
     -moz-appearance: none;
     appearance: none;
-    background: #E8E8E8;
+    background: #f7f6f6;
     padding: 12px;
     border-radius: 8px;
     width: 300px;
@@ -135,11 +137,12 @@ input::placeholder {
     transition: color 0.3s ease;
 }
 
+/* button styling (hover effect and color styling) */
 #main-btn {
-  background: #4169E1;
+  background: #94a572;
   color: white;
   border-style: outset;
-  border-color: #4169E1;
+  border-color: #94a572;
   border-radius: 10px;
   height: 45px;
   width: 100px;
@@ -154,15 +157,16 @@ input[type=submit] {
 }
 
 #main-btn:hover {
-    background-color: #6495ED;
+    background-color: #b7c39e;
+    border-color: #b7c39e;
     transition: 0.4s;
 }
 
 #edit-submit {
-  background: #4169E1;
+  background: #94a572;
   color: white;
   border-style: outset;
-  border-color: #4169E1;
+  border-color: #94a572;
   border-radius: 10px;
   height: 45px;
   width: 100px;
@@ -174,4 +178,22 @@ input[type=submit] {
 input[type=submit] {
   font: 1em/1.25em Arial, Helvetica, sans-serif;
   font-weight: bold;
+}
+
+#edit-submit:hover {
+    background: #b7c39e;
+    border-color: #b7c39e;
+    transition: 0.4s;
+}
+
+.li-button {
+    background: #94a572;
+  color: white;
+  border-style: outset;
+  border-color: #94a572;
+  border-radius: 15px;
+  height: 25px;
+  width: 50px;
+  font: 10px arial,sans-serif;
+  text-shadow: none;
 }

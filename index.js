@@ -53,6 +53,8 @@ function createFavoriteListItem(song) {
 function addFavoriteButtons(li, buttonContainer) {
   const playBtn = document.createElement("button");
   playBtn.textContent = "Play";
+  // adding a styling class to playBtn
+  playBtn.classList.add("li-button")
   buttonContainer.append(playBtn);
 
   playBtn.addEventListener("click", () => {
@@ -60,7 +62,9 @@ function addFavoriteButtons(li, buttonContainer) {
   });
 
   const editBtn = document.createElement("button");
-  editBtn.textContent = "Edit song info";
+  // editBtn styling. Changing edit song info to edit so it can fit better
+  editBtn.textContent = "Edit";
+  editBtn.classList.add("li-button")
   buttonContainer.append(editBtn);
 
   editBtn.addEventListener("click", () => {
@@ -70,7 +74,9 @@ function addFavoriteButtons(li, buttonContainer) {
   });
 
   const deleteBtn = document.createElement("button");
+  // adding styling to the deleteBtn
   deleteBtn.textContent = "X";
+  deleteBtn.classList.add("li-button")
   buttonContainer.append(deleteBtn);
 
   deleteBtn.addEventListener("click", () => {
