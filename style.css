@@ -49,7 +49,8 @@ body {
     z-index: 100;
 }
 
-.song-info-expandable {
+.song-info-expandable, #song-title, #song-artist {
+    background-color: beige;
     text-align: center;
     z-index: 100;
 }
