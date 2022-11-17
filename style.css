@@ -1,5 +1,6 @@
 * {
     font-family: 'BrushScriptMT', Tahoma, Verdana, sans-serif;
+    background-color: rgb(105,105,105);
 }
 
 body {
@@ -7,7 +8,6 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    /* Added a border to wrap around our content */
     border: solid #6a5376;
     border-radius: 30px;
     padding-bottom: 50px;
@@ -17,8 +17,28 @@ body {
     box-shadow: 0px 2px 5px;
 }
 
-#lower-body {
+#content {
     display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: beige;
+    z-index: 100;
+}
+
+#upper-body {
+    background-color: beige;
+    z-index: 100;
+}
+
+#search-input {
+    background-color: beige;
+    z-index: 100;
+}
+
+#lower-body {
+    background-color: beige;
+    display: flex;
+    z-index: 100;
 }
 
 .expandable {
@@ -26,10 +46,12 @@ body {
     width: 560px;
     height: 315px;
     box-shadow: 4px 7px;
+    z-index: 100;
 }
 
 .song-info-expandable {
     text-align: center;
+    z-index: 100;
 }
 
 #result-container, #save-container {
@@ -44,16 +66,20 @@ body {
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
+    z-index: 100;
 }
 
 #logo-1 {
+    background-color: beige;
     align-self: flex-start;
     width: 100px;
     height: 100px;
 }
 
 #header {
+    background-color: beige;
     display: flex;
+    z-index: 100;
 }
 
 .hidden {
@@ -75,11 +101,14 @@ ul {
     align-self: flex-start;
     overflow: hidden;
     overflow-y: scroll;
+    z-index: 100;
 }
 
 li {
+    background-color: white;
     display: flex;
     flex-direction: column;
+    z-index: 100;
 }
 
 li:hover {
@@ -103,8 +132,13 @@ li .button-container {
     align-self: flex-end;
 }
 
+#header h1 {
+    background-color: beige;
+}
+
 h1 {
     color: black;
+    background-color: white;
 }
 
 /* Form input styling (text to animate out and form styling) */
@@ -196,4 +230,29 @@ input[type=submit] {
   width: 50px;
   font: 10px arial,sans-serif;
   text-shadow: none;
+}
+
+.rain-container {
+    position: absolute;
+    background: #000;
+    top: 0px;
+    width: 100vw;
+    overflow: hidden;
+    z-index: -100;
+}
+
+i {
+position: absolute;
+height: 120px;
+border-radius: 0 0 999px 999px;
+animation: animate 5s linear infinite;
+}
+
+@keyframes animate {
+    0% {
+        transform: translateY(-120px);
+    }
+    100% {
+        transform: translateY(calc(100vh + 120px));
+    }
 }

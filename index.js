@@ -262,9 +262,6 @@ function playVideo(localHost, favoritedSong) {
     .then((song) => {
       if (song.videoURL !== "") {
         const player = document.querySelector("#video-player");
-        // I don't think we need this anymore, but I'm comnmenting it out since I'm not certain
-        // how you're using it.
-        // player.parentNode.classList.remove("hidden");
         player.innerHTML = `<iframe width="560" height="315" src="${song.videoURL}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
         player.classList.remove("hidden");
 
@@ -288,4 +285,47 @@ function playVideo(localHost, favoritedSong) {
 // returns date or 'date not listed' if date is empty
 function formatDate(date) {
   return (date === undefined) | (date === "") ? "date not listed" : date;
+}
+
+// ********** raindrop animations ******************
+const rainContainer = document.querySelector("#rain-container");
+
+// background Colors for the raindrop
+const background = [
+  "linear-gradient(transparent, white)",
+  "linear-gradient(transparent, white)",
+  "linear-gradient(transparent, white)",
+  "linear-gradient(transparent, white)",
+  "linear-gradient(transparent, white)"
+];
+
+const amount = 40; // amount of raindops
+let i = 0;
+
+// Looping and creating the raindrop then adding to the rainContainer
+while (i < amount) {
+  //  Creating and Element
+  const drop = document.createElement("i");
+
+  //   CSS Properties for raindrop
+  const raindropProperties = {
+    width: Math.random() * 5 + "px",
+    positionX: Math.floor(Math.random() * window.innerWidth) + "px",
+    delay: Math.random() * -50 + "s",
+    duration: Math.random() * 20 + "s",
+    bg: background[Math.floor(Math.random() * background.length)],
+    opacity: Math.random() + 0.2
+  };
+
+  //   Setting Styles for raindrop
+  drop.style.width = raindropProperties.width;
+  drop.style.left = raindropProperties.positionX;
+  drop.style.animationDelay = raindropProperties.delay;
+  drop.style.animationDuration = raindropProperties.duration;
+  drop.style.background = raindropProperties.bg;
+  drop.style.opacity = raindropProperties.opacity;
+
+  //   Appending the raindrop in the raindrop container
+  rainContainer.appendChild(drop);
+  i++;
 }

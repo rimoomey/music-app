@@ -10,43 +10,46 @@
     </head>
     <body>
 
-        <div id="header">
-            <h1>Song Saver 3000</h1>
-            <img src="./pixil-frame-0 (2).png" id="logo-1"></img>
-        </div>
-
-        <form id="search-input">
-            <input id="search" type='text' placeholder="Search for an artist here..." required></input>
-            <input id="main-btn" type="submit"></input>
-        </form>
-
-        <!-- I tried removing the class "hidden expandable" from the current-song-info as well as.. -->
-        <!-- the other child nodes, but strangely I'd only get a line, and it'd be behind our fav/search items -->
-        <!-- I'm going to remove the "hidden expandable" class, and try to figure it out from here -->
-        <div id="upper-body">
-            <div id="video-player" class="hidden expandable"></div>
-            <div id="current-song-info" class="hidden song-info-expandable">
-                <h2 id="song-title">Insert Song Title</h2>
-                <h3 id="song-artist">Insert Song Artist</h3>
+        <div id="rain-container"></div>
+        <div id="content">
+            <div id="header">
+                <h1>Song Saver 3000</h1>
+                <img src="./pixil-frame-0 (2).png" id="logo-1"></img>
             </div>
-        </div>
-
-        <div id="lower-body">
-            <div id="result-container">
-                <h1>Search Results</h1>
-                <ul>Potential matches:</ul>
+            
+            <form id="search-input">
+                <input id="search" type='text' placeholder="Search for an artist here..." required></input>
+                <input id="main-btn" type="submit"></input>
+            </form>
+    
+            <!-- I tried removing the class "hidden expandable" from the current-song-info as well as.. -->
+            <!-- the other child nodes, but strangely I'd only get a line, and it'd be behind our fav/search items -->
+            <!-- I'm going to remove the "hidden expandable" class, and try to figure it out from here -->
+            <div id="upper-body">
+                <div id="video-player" class="hidden expandable"></div>
+                <div id="current-song-info" class="hidden song-info-expandable">
+                    <h2 id="song-title">Insert Song Title</h2>
+                    <h3 id="song-artist">Insert Song Artist</h3>
+                </div>
             </div>
-        
-            <div id="save-container">
-                <h1>Favorites</h1>
-                <ul>Saved Songs:</ul>
+    
+            <div id="lower-body">
+                <div id="result-container">
+                    <h1>Search Results</h1>
+                    <ul>Potential matches:</ul>
+                </div>
+            
+                <div id="save-container">
+                    <h1>Favorites</h1>
+                    <ul>Saved Songs:</ul>
+                </div>
             </div>
+    
+            <form id="edit-form" class="hidden">
+                <input type="text" placeholder="Thumbnail source url" id="thumbnail"></input>
+                <input type="text" placeholder="Youtube video url" id="video-url"></input>
+                <input id="edit-submit" type="submit"></input>
+            </form>
         </div>
-
-        <form id="edit-form" class="hidden">
-            <input type="text" placeholder="Thumbnail source url" id="thumbnail"></input>
-            <input type="text" placeholder="Youtube video url" id="video-url"></input>
-            <input id="edit-submit" type="submit"></input>
-        </form>
     </body>
 </html>
