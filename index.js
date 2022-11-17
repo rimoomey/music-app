@@ -256,9 +256,6 @@ function playVideo(localHost, favoritedSong) {
     .then((song) => {
       if (song.videoURL !== "") {
         const player = document.querySelector("#video-player");
-        // I don't think we need this anymore, but I'm comnmenting it out since I'm not certain
-        // how you're using it.
-        // player.parentNode.classList.remove("hidden");
         player.innerHTML = `<iframe width="560" height="315" src="${song.videoURL}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
         player.classList.remove("hidden");
 
