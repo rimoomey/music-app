@@ -188,7 +188,13 @@ function apiQuery(api, searchValue) {
     .then((data) => {
       const resultList = document.querySelector("#result-container ul");
       resultList.innerHTML = "";
-      resultList.textContent = `Potential song matches for "${searchValue}":`;
+      let numOfResults = 0;
+      data.recordings.forEach(song => {
+        if(song === song){
+          ++numOfResults
+        }
+      })
+      resultList.textContent = `${numOfResults} song matches for "${searchValue}":`;
 
       data.recordings.forEach((song) => displayResult(song));
     });
