@@ -168,8 +168,10 @@ function enableSearch() {
   searchForm.addEventListener("submit", (e) => {
     e.preventDefault();
 
+    let randomNumOfSongs = Math.floor(Math.random() * 30) + 10;
+
     const searchArtist = searchForm.querySelector("input").value;
-    const additionalFormatting = `recording?query=artist:"${searchArtist}"&limit=100&fmt=json`;
+    const additionalFormatting = `recording?query=artist:"${searchArtist}"&limit=${randomNumOfSongs}&fmt=json`;
 
     apiQuery(api + additionalFormatting, searchArtist);
 
