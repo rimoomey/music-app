@@ -314,7 +314,7 @@ while (i < amount) {
     width: Math.random() * 5 + "px",
     positionX: Math.floor(Math.random() * window.innerWidth) + "px",
     delay: Math.random() * -50 + "s",
-    duration: Math.random() * 20 + "s",
+    duration: (Math.random() * 20) + 3 + "s",
     bg: background[Math.floor(Math.random() * background.length)],
     opacity: Math.random() + 0.2
   };
