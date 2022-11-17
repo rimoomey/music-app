@@ -5,4 +5,6 @@ The goal of this project was to create a music search application which allows t
 they particularly enjoy. The api in usage is MusicBrainz, as well as a mock database which lives in the project repository, used for persisting favorite
 songs. The application also allows the playback of Youtube videos, which a user can associate with a particular song and save for later viewing.
 
-This project was written by Sam Lee, Rimon Moomey, and June Biadog.
+This project was written by Sam Lee and Rimon Moomey.
+
+Currently availabe for preview at https://rimoomey.github.io/music-app
