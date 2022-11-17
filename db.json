@@ -4,15 +4,24 @@
       "title": "Keep Yourself Alive (long-lost re-take)",
       "date": "1991-06-17",
       "thumbnail": "",
-      "videoURL": "https://www.youtube.com/embed/5If1fiuyt8U?controls=0",
+      "videoURL": "",
       "id": 1
     },
     {
       "title": "Every Day",
       "date": "2019-09-13",
       "thumbnail": "",
-      "videoURL": "https://www.youtube.com/embed/5If1fiuyt8U?controls=0",
+      "artist": "Begonia",
+      "videoURL": "https://www.youtube.com/embed/5If1fiuyt8U",
       "id": 2
+    },
+    {
+      "title": "Bloodstream (Live from The BRITs)",
+      "date": "2015",
+      "thumbnail": "https://i.scdn.co/image/ab67616d0000b273ed139c2e0e3681cc2d35e256",
+      "artist": "Ed Sheeran",
+      "videoURL": "",
+      "id": 6
     }
   ]
 }

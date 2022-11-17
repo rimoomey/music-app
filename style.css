@@ -7,6 +7,14 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
+    /* Added a border to wrap around our content */
+    border: solid #6a5376;
+    border-radius: 30px;
+    padding-bottom: 50px;
+    width: 60%;
+    margin: auto;
+    margin-top:2%;
+    box-shadow: 0px 2px 5px;
 }
 
 #lower-body {
@@ -18,6 +26,10 @@ body {
     width: 560px;
     height: 315px;
     box-shadow: 4px 7px;
+}
+
+.song-info-expandable {
+    text-align: center;
 }
 
 #result-container, #save-container {
@@ -70,13 +82,21 @@ li {
     flex-direction: column;
 }
 
+li:hover {
+    box-shadow: 0px 2px 11px rgba(33,33,33,.2);
+    text-shadow: none;
+    transition: ease-in-out 0.3s;
+}
+
 .search-result, .favorite-song {
-    border: 5px solid lightblue;
+    border: 3px solid #DED6DA;
+    border-radius: 10px;
     font-size: medium;
     width: 300px;
     list-style: none;
-    margin: 5px;
+    margin: 10px;
     text-align: left;
+    padding: 7px;
 }
 
 li .button-container {
@@ -87,25 +107,21 @@ h1 {
     color: black;
 }
 
+/* Form input styling (text to animate out and form styling) */
 input[type=text] {
-    /* padding: 10px;
-    margin-bottom: 20px;
-    width: 500px;
-    height: 30px;
-    border-radius: 10px;
-    box-shadow: 0px 5px 15px rgba(0,0,0,0.2);
-    border-color: #89cff0 */
     border: none;
     -webkit-appearance: none;
     -ms-appearance: none;
     -moz-appearance: none;
     appearance: none;
-    background: #E8E8E8;
+    background: #f7f6f6;
     padding: 12px;
     border-radius: 8px;
     width: 300px;
     box-shadow: 0px 1px 3px;
-    margin: 10px;
+    margin-bottom: 10px;
+    margin-top: 0px;
+    outline: none;
 }
 
 input {
@@ -121,18 +137,17 @@ input::placeholder {
     transition: color 0.3s ease;
 }
 
+/* button styling (hover effect and color styling) */
 #main-btn {
-  background-color: transparent;
-  border: 1;
-  border-width: .25em;
-  border-color: #87ceeb;
-  font-weight: 600;
-  line-height: 1;
-  margin-top: 1.5rem;
-  padding: 0.5em;
+  background: #94a572;
+  color: white;
+  border-style: outset;
+  border-color: #94a572;
   border-radius: 10px;
-  width: 100px;
   height: 45px;
+  width: 100px;
+  font: bold 15px arial,sans-serif;
+  text-shadow: none;
 }
 
 #main-btn,
@@ -142,6 +157,43 @@ input[type=submit] {
 }
 
 #main-btn:hover {
-    background-color: #87ceeb;
-    transition: 0.7s;
+    background-color: #b7c39e;
+    border-color: #b7c39e;
+    transition: 0.4s;
+}
+
+#edit-submit {
+  background: #94a572;
+  color: white;
+  border-style: outset;
+  border-color: #94a572;
+  border-radius: 10px;
+  height: 45px;
+  width: 100px;
+  font: bold 15px arial,sans-serif;
+  text-shadow: none;
+}
+
+#edit-submit,
+input[type=submit] {
+  font: 1em/1.25em Arial, Helvetica, sans-serif;
+  font-weight: bold;
+}
+
+#edit-submit:hover {
+    background: #b7c39e;
+    border-color: #b7c39e;
+    transition: 0.4s;
+}
+
+.li-button {
+    background: #94a572;
+  color: white;
+  border-style: outset;
+  border-color: #94a572;
+  border-radius: 15px;
+  height: 25px;
+  width: 50px;
+  font: 10px arial,sans-serif;
+  text-shadow: none;
 }

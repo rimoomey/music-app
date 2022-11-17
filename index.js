@@ -53,6 +53,8 @@ function createFavoriteListItem(song) {
 function addFavoriteButtons(li, buttonContainer) {
   const playBtn = document.createElement("button");
   playBtn.textContent = "Play";
+  // adding a styling class to playBtn
+  playBtn.classList.add("li-button")
   buttonContainer.append(playBtn);
 
   playBtn.addEventListener("click", () => {
@@ -60,7 +62,9 @@ function addFavoriteButtons(li, buttonContainer) {
   });
 
   const editBtn = document.createElement("button");
-  editBtn.textContent = "Edit song info";
+  // editBtn styling. Changing edit song info to edit so it can fit better
+  editBtn.textContent = "Edit";
+  editBtn.classList.add("li-button")
   buttonContainer.append(editBtn);
 
   editBtn.addEventListener("click", () => {
@@ -70,7 +74,9 @@ function addFavoriteButtons(li, buttonContainer) {
   });
 
   const deleteBtn = document.createElement("button");
+  // adding styling to the deleteBtn
   deleteBtn.textContent = "X";
+  deleteBtn.classList.add("li-button")
   buttonContainer.append(deleteBtn);
 
   deleteBtn.addEventListener("click", () => {
@@ -213,6 +219,7 @@ function createSearchLI(song) {
 
   const saveBtn = document.createElement("button");
   saveBtn.textContent = "Save";
+  saveBtn.classList.add("li-button")
   saveBtn.addEventListener("click", () => save(song));
   buttonContainer.append(saveBtn);
 
@@ -232,6 +239,7 @@ function save(song) {
       title: `${song.title}`,
       date: `${song["first-release-date"]}`,
       thumbnail: "",
+      artist: `${song['artist-credit'][0].name}`,
       videoURL: "",
     }),
   })
@@ -242,16 +250,26 @@ function save(song) {
 }
 
 // ********************* Creates a video box to play the saved song for a given favorited list item *****************
-
 function playVideo(localHost, favoritedSong) {
   fetch(`${localHost}${favoritedSong.id}`)
     .then((res) => res.json())
     .then((song) => {
       if (song.videoURL !== "") {
         const player = document.querySelector("#video-player");
-        player.parentNode.classList.remove("hidden");
+        // I don't think we need this anymore, but I'm comnmenting it out since I'm not certain
+        // how you're using it.
+        // player.parentNode.classList.remove("hidden");
         player.innerHTML = `<iframe width="560" height="315" src="${song.videoURL}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
         player.classList.remove("hidden");
+
+        // ******* Below will give the song title/artist of the video being played ********* //
+        const songInfo = document.querySelector("#current-song-info")
+        songInfo.classList.remove("hidden")
+        const songTitle = document.querySelector("#song-title")
+        songTitle.textContent = song.title
+
+        const songArtist = document.querySelector("#song-artist")
+        songArtist.textContent = song.artist
       }
     });
 }
