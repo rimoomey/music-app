@@ -169,7 +169,7 @@ function enableSearch() {
     e.preventDefault();
 
     const searchArtist = searchForm.querySelector("input").value;
-    const additionalFormatting = `recording?query=artist:"${searchArtist}"&limit=50&fmt=json`;
+    const additionalFormatting = `recording?query=artist:"${searchArtist}"&limit=100&fmt=json`;
 
     apiQuery(api + additionalFormatting, searchArtist);
 
