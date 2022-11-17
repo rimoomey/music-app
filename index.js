@@ -288,6 +288,8 @@ function formatDate(date) {
 }
 
 // ********** raindrop animations ******************
+
+// taken from an article by Jatin Sharma at https://dev.to/j471n/colorful-rain-with-js-514j
 const rainContainer = document.querySelector("#rain-container");
 
 // background Colors for the raindrop
