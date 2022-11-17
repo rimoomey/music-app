@@ -232,6 +232,7 @@ function save(song) {
       title: `${song.title}`,
       date: `${song["first-release-date"]}`,
       thumbnail: "",
+      artist: `${song['artist-credit'][0].name}`,
       videoURL: "",
     }),
   })
@@ -242,16 +243,26 @@ function save(song) {
 }
 
 // ********************* Creates a video box to play the saved song for a given favorited list item *****************
-
 function playVideo(localHost, favoritedSong) {
   fetch(`${localHost}${favoritedSong.id}`)
     .then((res) => res.json())
     .then((song) => {
       if (song.videoURL !== "") {
         const player = document.querySelector("#video-player");
-        player.parentNode.classList.remove("hidden");
+        // I don't think we need this anymore, but I'm comnmenting it out since I'm not certain
+        // how you're using it.
+        // player.parentNode.classList.remove("hidden");
         player.innerHTML = `<iframe width="560" height="315" src="${song.videoURL}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
         player.classList.remove("hidden");
+
+        // ******* Below will give the song title/artist of the video being played ********* //
+        const songInfo = document.querySelector("#current-song-info")
+        songInfo.classList.remove("hidden")
+        const songTitle = document.querySelector("#song-title")
+        songTitle.textContent = song.title
+
+        const songArtist = document.querySelector("#song-artist")
+        songArtist.textContent = song.artist
       }
     });
 }
